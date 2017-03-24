@@ -3,12 +3,19 @@ require 'net/http'
 require 'uri'
 
 class GetUSGSData
-  def initialize
+  attr_accessor :state_codes
+
+  def initialize(state_codes=[])
     # site says 100,000 limit at a time
     # no known documentation on how to "paginate" or get the next 100,000 so we can't return more
+    if state_codes.empty?
+      @state_codes =  ["al","ak","aq","az","ar","ca","co","ct","de","dc","fl","ga","gu","hi","id","il","in","ia","ks","ky","la","me","md","ma","mi","mn","ms","mo","mt","ne","nv","nh","nj","nm","ny","nc","nd","mp","oh","ok","or","pa","pr","ri","sc","sd","tn","tx","ut","vt","vi","va","wa","wv","wi","wy"]
+    else
+      @state_codes = state_codes
+    end
+  end
 
-    state_codes = ["al","ak","aq","az","ar","ca","co","ct","de","dc","fl","ga","gu","hi","id","il","in","ia","ks","ky","la","me","md","ma","mi","mn","ms","mo","mt","ne","nv","nh","nj","nm","ny","nc","nd","mp","oh","ok","or","pa","pr","ri","sc","sd","tn","tx","ut","vt","vi","va","wa","wv","wi","wy"]
-
+  def run
     # lets start by getting all the sites we can loop through and get the data for each site
     state_codes.each do |state|
       puts state
@@ -53,4 +60,5 @@ class GetUSGSData
 
 end
 
-GetUSGSData.new
+GetUSGSData.new(["az"]).run #to run a single state - best for testing
+# GetUSGSData.new.run # to run all the states
